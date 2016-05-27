@@ -1,0 +1,22 @@
+<html>
+<head>
+<title>Vector Library Tests</title>
+</head>
+<body>
+Dotting.  This should be 15: 
+<div id='foo'>
+
+<script src='sylvester/sylvester.js'></script>
+
+<script>
+var V1 = $V([3,4,5]);
+var V2 = $V([9,-3,0]);
+
+var d = V1.dot(V2);
+
+var div = document.getElementById('foo');
+div.innerHTML = d;
+</script>
+
+</body>
+</html>

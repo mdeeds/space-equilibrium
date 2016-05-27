@@ -1,0 +1,63 @@
+<html>
+<head>
+<title>DataFile</title>
+</head>
+<body>
+
+<script src="jquery-2.2.4.min.js"></script>
+<script src="d3/d3.min.js"></script>
+<script src="state.js"></script>
+<script src="body.js"></script>
+
+<svg width=800 height=800 />
+
+<script>
+
+
+var initialize = function(block) {
+  var svgContainer = d3.select("body").select("svg");
+
+  var bodies = [];
+
+  $.each(block, function(key, val) {
+    console.log('Object name: ' + key);
+    var data = val.data;
+    var body = new Body();
+    for (var i = 0; i < data.length; ++i) {
+      body.addPosition(data[i]);
+    }
+    bodies.push(body);
+  });
+
+  var lineFunction = d3.svg.line()
+    .x(function(d) { return 400 + 400 * (d.x / 3e8); })
+    .y(function(d) { return 400 + 400 * (d.y / 3e8); })
+     .interpolate("cardinal");
+
+  for (var i = 0; i < bodies.length; ++i) {
+    var positions = bodies[i].getPositions();
+    //for (var j = 0; j < positions.length; ++j) {
+    //  var circle = svgContainer.append("circle")
+    //                        .attr("r", 6)
+    //                        .attr("cx", 400 + 400 * (x / 3e8))
+    //                        .attr("cy", 400 + 400 * (y / 3e8))
+    //                        .attr("stroke", "blue")
+    //                        .attr("stroke-width", 2)
+    //                        .attr("fill", "none");
+    //}
+    var lineGraph = svgContainer.append("path")
+                            .attr("d", lineFunction(positions))
+                            .attr("stroke", "blue")
+                            .attr("stroke-width", 2)
+                            .attr("fill", "none");
+  }
+};
+
+$.getJSON("data.txt", initialize);
+
+
+
+
+</script>
+
+</body>

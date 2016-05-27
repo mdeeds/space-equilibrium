@@ -1,0 +1,87 @@
+<html>
+<head>
+<title>
+Simple orbit
+</title>
+</head>
+<body>
+
+<script src="d3/d3.min.js"></script>
+<script src='sylvester/sylvester.js'></script>
+
+<div>Top</div>
+
+<svg id='map'>
+</svg>
+
+<script>
+
+var G = 6.67408e-20;  // km^3/(kgs^2)
+var EARTH_MASS = 5.972e24;  // kg
+var SUN_MASS = 1.989e30;  // kg
+var EARTH_ORBIT_RADIUS = 149.60e6;  // km
+var EARTH_ORBIT_VELOCITY = 2 * Math.PI * EARTH_ORBIT_RADIUS 
+  / (365.256363004 * 24 * 60 * 60);  // km/s
+
+var sun_pos = $V([0,0,0]);
+var earth_pos = $V([EARTH_ORBIT_RADIUS, 0, 0]);
+var earth_vel = $V([0, EARTH_ORBIT_VELOCITY, 0]);
+
+var ts = 24 * 60 * 60;  // One day in seconds
+
+var trajectory = [];
+
+for (var i = 0; i < 365; ++i) {
+  trajectory.push(earth_pos);
+
+  var r = sun_pos.subtract(earth_pos);
+  var length = r.modulus();
+  var length2 = length * length;
+  var a = r.toUnitVector().x(G * SUN_MASS / length2);
+
+  earth_pos = earth_pos.add(earth_vel.x(ts));
+  earth_vel = earth_vel.add(a.x(ts));
+}
+
+var SCREEN_SIZE=800;
+
+var translate_vector = $V([0, 0, 0]);
+var scale = 0.8 * SCREEN_SIZE / (2.0 * EARTH_ORBIT_RADIUS);
+var scale_matrix = $M(
+  [[scale, 0, 0],
+   [0, scale, 0],
+   [0, 0, scale]]);
+
+var center_vector = $V([SCREEN_SIZE / 2, SCREEN_SIZE / 2, 0]);
+
+var lineData = [];
+for (var i = 0; i < trajectory.length; ++i) {
+  lineData[i] = scale_matrix
+		    .multiply(trajectory[i].add(translate_vector))
+		    .add(center_vector);
+}
+
+var lineFunction = d3.svg.line()
+  .x(function(d) { return d.elements[0]; })
+  .y(function(d) { return d.elements[1]; })
+  .interpolate("cardinal");
+
+var svgContainer = d3.select("body").select("svg")
+                    .attr("width", SCREEN_SIZE)
+                    .attr("height", SCREEN_SIZE);
+
+var lineGraph = svgContainer.append("path")
+                    .attr("d", lineFunction(lineData))
+                    .attr("stroke", "blue")
+                    .attr("stroke-width", 2)
+                    .attr("fill", "none");
+
+
+</script>
+
+
+<div>Done?</div>
+
+
+</body>
+</html>
