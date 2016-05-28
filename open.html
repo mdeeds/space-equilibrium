@@ -6,9 +6,11 @@
 
 <script src="jquery-2.2.4.min.js"></script>
 <script src="d3/d3.min.js"></script>
+<script src="sylvester/sylvester.js"></script>
 <script src="state.js"></script>
 <script src="body.js"></script>
 <script src="load.js"></script>
+
 
 <svg width=800 height=800 />
 
@@ -19,8 +21,8 @@ var initialize = function(body) {
   var svgContainer = d3.select("body").select("svg");
 
   var lineFunction = d3.svg.line()
-    .x(function(d) { return 400 + 400 * (d.x / 3e8); })
-    .y(function(d) { return 400 + 400 * (d.y / 3e8); })
+    .x(function(d) { return 400 + 400 * (d.pos.elements[0] / 3e8); })
+    .y(function(d) { return 400 + 400 * (d.pos.elements[1] / 3e8); })
      .interpolate("cardinal");
 
   var positions = body.getPositions();
