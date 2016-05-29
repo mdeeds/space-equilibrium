@@ -1,11 +1,10 @@
 // TODO: add a "clock" to the constructor here. 
 var Body = function() {
-  this.positions = [];
+  this.states = [];
 }
 
-Body.prototype.addPosition = function(data_element) {
-  var state = new State(data_element);
-  this.positions.push(state);
+Body.prototype.addState = function(state) {
+  this.states.push(state);
 }
 
 // Static - it should impact every instance
@@ -15,5 +14,9 @@ Body.setReference = function(body) {
 
 // Eventually this should use a time range and also interpolate.
 Body.prototype.getPositions = function() {
-  return this.positions;
+  var result = [];
+  for (var i = 0; i < this.states.length; ++i) {
+    result.push(this.states[i].pos);
+  }
+  return result;
 }

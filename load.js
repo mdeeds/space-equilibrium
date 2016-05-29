@@ -10,7 +10,7 @@ Load.step1_ = function(block, on_load_body) {
     var data = val.data;
     var body = new Body();
     for (var i = 0; i < data.length; ++i) {
-      body.addPosition(data[i]);
+      body.addState(new State(data[i]));
     }
     bodies.push(body);
   });

@@ -20,12 +20,24 @@
 var initialize = function(body) {
   var svgContainer = d3.select("body").select("svg");
 
+  var look_at = $V([0,0,0]);
+
+  var scale = Matrix.I(3).x(400 / 3e8);
+
+  var screen_translate = $V([400, 400, 0]);
+
   var lineFunction = d3.svg.line()
-    .x(function(d) { return 400 + 400 * (d.pos.elements[0] / 3e8); })
-    .y(function(d) { return 400 + 400 * (d.pos.elements[1] / 3e8); })
+    .x(function(d) { return d.elements[0]; })
+    .y(function(d) { return d.elements[1]; })
      .interpolate("cardinal");
 
   var positions = body.getPositions();
+  for (var i = 0; i < positions.length; ++i) {
+    positions[i] = positions[i].subtract(look_at);
+    positions[i] = scale.x(positions[i]);
+    positions[i] = positions[i].add(screen_translate);
+  }
+
   var lineGraph = svgContainer.append("path")
                           .attr("d", lineFunction(positions))
                           .attr("stroke", "blue")
