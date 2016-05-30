@@ -1,22 +1,26 @@
-// TODO: add a "clock" to the constructor here. 
-var Body = function() {
+var Body = function(clock) {
   this.states = [];
+  this.clock = clock
 }
 
 Body.prototype.addState = function(state) {
   this.states.push(state);
 }
 
-// Static - it should impact every instance
-Body.setReference = function(body) {
-  console.err("Not implemented.");
-}
-
 // Eventually this should use a time range and also interpolate.
 Body.prototype.getPositions = function() {
   var result = [];
   for (var i = 0; i < this.states.length; ++i) {
-    result.push(this.states[i].pos);
+    var pos = this.states[i].pos;
+    result.push(pos);
   }
   return result;
+}
+
+Body.prototype.positionAt = function(julian_time) {
+  console.err("Not implemented.");
+}
+
+Body.prototype.currentPosition = function() {
+  return this.positionAt(this.clock.currentTime());
 }

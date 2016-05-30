@@ -1,8 +1,9 @@
+var World = function() {}
 
-var Load = function() {}
+// TODO set reference frame should be in here somewhere.
+// Also, clock should probably be exposed.
 
-
-Load.step1_ = function(block, on_load_body) {
+World.prototype.step1_ = function(block, on_load_body) {
   var bodies = [];
 
   $.each(block, function(key, val) {
@@ -20,6 +21,7 @@ Load.step1_ = function(block, on_load_body) {
   }
 }
 
-Load.load = function(source_uri, on_load_body) {
-  $.getJSON(source_uri, function(block) {Load.step1_(block, on_load_body);});
+World.prototype.load = function(source_uri, on_load_body) {
+  var self = this;
+  $.getJSON(source_uri, function(block) {self.step1_(block, on_load_body);});
 }

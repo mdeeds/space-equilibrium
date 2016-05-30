@@ -7,15 +7,15 @@
 <script src="jquery-2.2.4.min.js"></script>
 <script src="d3/d3.min.js"></script>
 <script src="sylvester/sylvester.js"></script>
-<script src="state.js"></script>
-<script src="body.js"></script>
-<script src="load.js"></script>
 
+<script src="body.js"></script>
+<script src="clock.js"></script>
+<script src="state.js"></script>
+<script src="world.js"></script>
 
 <svg width=800 height=800 style='background-color: #0C090A'/>
 
 <script>
-
 
 var initialize = function(body) {
   var svgContainer = d3.select("body").select("svg");
@@ -45,8 +45,11 @@ var initialize = function(body) {
                           .attr("fill", "none");
 };
 
-
-Load.load("data.json", initialize);
+var end_julian = 2458262.500000000;
+var start_julian = end_julian - 100;
+var clock = new Clock(start_julian, end_julian);
+var world = new World(clock);
+world.load("data.json", initialize);
 
 </script>
 
