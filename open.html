@@ -10,6 +10,7 @@
 
 <script src="body.js"></script>
 <script src="clock.js"></script>
+<script src="display.js"></script>
 <script src="state.js"></script>
 <script src="world.js"></script>
 
@@ -17,39 +18,16 @@
 
 <script>
 
-var initialize = function(body) {
-  var svgContainer = d3.select("body").select("svg");
-
-  var look_at = $V([0,0,0]);
-
-  var scale = Matrix.I(3).x(400 / 3e8);
-
-  var screen_translate = $V([400, 400, 0]);
-
-  var lineFunction = d3.svg.line()
-    .x(function(d) { return d.elements[0]; })
-    .y(function(d) { return d.elements[1]; })
-     .interpolate("cardinal");
-
-  var positions = body.getPositions();
-  for (var i = 0; i < positions.length; ++i) {
-    positions[i] = positions[i].subtract(look_at);
-    positions[i] = scale.x(positions[i]);
-    positions[i] = positions[i].add(screen_translate);
-  }
-
-  var lineGraph = svgContainer.append("path")
-                          .attr("d", lineFunction(positions))
-                          .attr("stroke", "blue")
-                          .attr("stroke-width", 2)
-                          .attr("fill", "none");
-};
+var handleWheel = function(data, index) {
+}
 
 var end_julian = 2458262.500000000;
 var start_julian = end_julian - 100;
 var clock = new Clock(start_julian, end_julian);
 var world = new World(clock);
-world.load("data.json", initialize);
+var display = new Display(d3.select("body").select("svg"));
+
+world.load("data.json", function(body) { display.addBody(body); });
 
 </script>
 
